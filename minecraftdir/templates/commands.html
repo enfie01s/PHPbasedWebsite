@@ -1,0 +1,42 @@
+{% extends default.html %}
+{% block body %}
+<form action="" method="get" class="row">
+{{form}}
+<div class="col-sm-2">
+<button class="btn btn-primary" type="submit"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+</div>
+</form>
+<hr>
+<div class="page-header">
+    <h1>Commands <small>Available to the chosen rank and above</small></h1>
+</div>
+<def>Command Flags: [] = Optional, &lt;&gt; = Required</def>
+<div>
+<div class="row head">
+    <div class="col-md-5">Command</div>
+    <div class="col-md-7">Description</div>
+</div>
+{% for i,command in commands %}
+<div class="row striped">
+    <div class="col-md-5">{{command.comm}}</div>
+    <div class="col-md-7">{{command.descrip}}</div>
+</div>
+{% endfor %}
+</div>
+<br><br>
+<div class="page-header">
+    <h1>Plugins</h1>
+</div>
+<div>
+<div class="row head">
+    <div class="col-md-5">Plugin</div>
+    <div class="col-md-7">Version</div>
+</div>
+{% for i,plugin in plugins %}
+<div class="row striped">
+    <div class="col-md-5">{{plugin.0}}</div>
+    <div class="col-md-7">{{plugin.1}}</div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

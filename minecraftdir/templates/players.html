@@ -1,0 +1,30 @@
+{% extends default.html %}
+{% block body %}
+<div class="row">
+{% for player in players %}
+<div class="col-sm-2 text-center">
+    <a href="{{rootpg}}/players/{{player.player}}"><img src="https://minotar.net/armour/bust/{{player.player}}/100.png" alt=""></a><br><br>
+    <h3><a href="{{rootpg}}/players/{{player.player}}">{{player.player}}</a></h3>
+    <hr>
+    <div class="row small">
+        <div class="col-sm-4"><b>Rank:</b></div><div class="col-sm-8 text-left">{{player.rankname}}</div><br>
+        <div class="col-sm-4"><b>Prefix:</b></div><div class="col-sm-8 text-left">{{player.prefix|pretty}}</div><br>
+        <div class="col-sm-4"><b>Joined:</b></div><div class="col-sm-8 text-left">
+        {% if player.registered > 1 %}
+            {{ player.registered|date:'d/m/y' }}
+        {% else %}
+            Never
+        {% endif %}</div><br>
+        <div class="col-sm-4"><b>Seen:</b></div><div class="col-sm-8 text-left">
+        {% if player.uuid in onlineplayers %}
+            <span class="online">Now</span>
+        {% elseif player.sess_end > 1 %}
+            {{ player.sess_end|date:'d/m/y' }}
+        {% else %}
+            Never
+        {% endif %}</div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
