@@ -1,0 +1,76 @@
+<?php
+/* 
+For options and radios, add 'options'=>array('option1','option2') 
+*/
+$form_managetv = array(
+    'title'=>array(
+        'type'=>'text',
+        'faclass'=>'info',
+        'placeholder'=>'Title',
+        'required'=>'required'),
+    'seotitle'=>array(
+        'type'=>'text',
+        'faclass'=>'link',
+        'placeholder'=>'Part of the url: path/<seotitle here>',
+        'required'=>'required'),
+    'tvdbid'=>array(
+        'type'=>'text',
+        'faclass'=>'desktop',
+        'placeholder'=>'TVDB ID',
+        'required'=>''),
+    'rssfeedid'=>array(
+        'type'=>'text',
+        'faclass'=>'rss-square',
+        'placeholder'=>'RSS Feed ID',
+        'required'=>''),
+    'overview'=>array(
+        'type'=>'textarea',
+        'faclass'=>'newspaper-o',
+        'placeholder'=>'Overview',
+        'required'=>''),
+    'audience'=>array(
+        'type'=>'radio',
+        'faclass'=>'user-circle',
+        'placeholder'=>'Audience',
+        'options'=>array('All','Mat','Stella'),
+        'required'=>''),
+    );
+$form_managemovie = array(
+    'title'=>array(
+        'type'=>'text',
+        'faclass'=>'info',
+        'placeholder'=>'Title',
+        'required'=>'required'),
+    'seotitle'=>array(
+        'type'=>'text',
+        'faclass'=>'link',
+        'placeholder'=>'Part of the url: path/<seotitle here>',
+        'required'=>'required'),
+    'datestr'=>array(
+        'type'=>'date',
+        'faclass'=>'calendar',
+        'placeholder'=>'Date of the event',
+        'required'=>'required'),
+    'turl'=>array(
+        'type'=>'text',
+        'faclass'=>'link',
+        'placeholder'=>'URL for more info',
+        'required'=>''),
+    'cert'=>array(
+        'type'=>'select',
+        'faclass'=>'child',
+        'placeholder'=>'Please set the certification',
+        'options'=>array('U','PG','12','12A','PG-13','15','18'),
+        'required'=>''),
+    'banner'=>array(
+        'type'=>'file',
+        'faclass'=>'picture-o',
+        'placeholder'=>'Poster Image',
+        'required'=>''),
+    'overview'=>array(
+        'type'=>'textarea',
+        'faclass'=>'newspaper-o',
+        'placeholder'=>'Overview',
+        'required'=>''),
+    );
+?>

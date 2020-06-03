@@ -1,0 +1,70 @@
+{% extends base.html %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{$pagedir}}/static/lib/bootstrap-datepicker-1.6.4-dist/css/bootstrap-datepicker.min.css">
+{% endblock %}
+
+
+{% block body %}
+<h1>{% if post.id %}Edit{% else %}Create{% endif %} Post</h1>
+{% if errors %}
+<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error:<br>{{ errors }}</div>
+{% endif %}
+<form action="" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{{post.id}}" />
+{{form}}
+<br><br>
+<button class="btn btn-primary" type="submit" name="savecontinue"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if post.id %}Save{% else %}Add{% endif %} and continue editing</button> <button class="btn btn-primary" type="submit" name="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if post.id %}Save{% else %}Add{% endif %}</button>
+{% if post.id %}<button class="btn btn-danger" type="submit" name="deleterow"><i class="fa fa-times" aria-hidden="true"></i> Delete</button>{% endif %}
+</form>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{pagedir}}/static/lib/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.js"></script>
+<script src="https://cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>
+<script>
+$(document).ready(function(){
+    $('#id_pub_date').datepicker({ 
+    format: 'dd/mm/yyyy',
+    orientation: 'bottom',
+    todayHighlight: true
+    });
+});
+// https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
+CKEDITOR.replace( 'id_body', {
+    customConfig: '',
+    toolbarGroups: [
+        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+        { name: 'forms', groups: [ 'forms' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+        { name: 'links', groups: [ 'links' ] },
+        '/',
+        { name: 'styles', groups: [ 'styles' ] },
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        { name: 'insert', groups: [ 'insert' ] },
+        { name: 'colors', groups: [ 'colors' ] },
+        { name: 'tools', groups: [ 'tools' ] },
+        { name: 'others', groups: [ 'others' ] },
+
+        { name: 'about', groups: [ 'about' ] }
+    ],
+    removeButtons: 'Save,NewPage,Preview,Print,Templates,SelectAll,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,Language,BidiRtl,BidiLtr,Flash,PageBreak,Iframe,Font,FontSize,About'
+});
+$('#id_seotitle').on("keyup",function(){seoInput($(this))});
+
+$('#id_seotitle').on("focus",function(){
+    if($(this).val().length < 1){
+        $(this).val=$('#id_title').val().toLowerCase();
+        $(this).val(function(i, v) {return $('#id_title').val().toLowerCase();});
+        seoInput($(this))
+    }
+});
+function seoInput(Obj)
+{
+    Obj.val(function(i, v) {return v.replace(/\s/ig,'-');});
+    Obj.val(function(i, v) {return v.replace(/[^a-z0-9\-]/i,'');});
+}
+</script>
+{% endblock %}

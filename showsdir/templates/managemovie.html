@@ -1,0 +1,49 @@
+{% extends default.html %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block errors %}
+{% if errors %}
+<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error:<br>{{ errors }}</div>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<br><h1>{% if post.id %}Edit {% else %}Add{% endif %} Movie</h1>
+<br>
+<form action="" method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{{post.id}}" />
+{{form}}
+<br><br>
+<button class="btn btn-primary" type="submit" name="savecontinue"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if post.id %}Save{% else %}Add{% endif %} and continue editing</button> <button class="btn btn-primary" type="submit" name="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if post.id %}Save{% else %}Add{% endif %}</button>
+{% if post.id %}<button class="btn btn-danger" type="submit" name="deletemovie"><i class="fa fa-times" aria-hidden="true"></i> Delete</button>
+{% endif %}
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+$(document).ready(function(){
+$('#id_datestr').datepicker({ 
+    format: 'dd/mm/yyyy'
+    });
+});
+$('#id_seotitle').on("keyup",function(){seoInput($(this))});
+
+$('#id_seotitle').on("focus",function(){
+    if($(this).val().length < 1){
+        $(this).val=$('#id_title').val().toLowerCase();
+        $(this).val(function(i, v) {return $('#id_title').val().toLowerCase();});
+        seoInput($(this))
+    }
+});
+function seoInput(Obj)
+{
+    Obj.val(function(i, v) {return v.replace(/\s/ig,'-');});
+    Obj.val(function(i, v) {return v.replace(/[^a-z0-9\-]/i,'');});
+}
+</script>
+{% endblock %}

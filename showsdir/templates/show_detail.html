@@ -1,0 +1,55 @@
+{% extends default.html %}
+{% block body %}
+<h1>{{show.title}}</h1>
+<img src="{{pagedir}}/media/bart/{{show.tvdbid}}.jpg" alt="" class='center-block main-banner'>
+<p><span id="ov"><a href="shows/manage/{{show.seotitle}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> <a href="http://showrss.info/browse/{{show.rssfeedid}}" target="_blank" title="ShowRSS"><i class="fa fa-rss-square" aria-hidden="true"></i></a> <a href="https://www.thetvdb.com/?tab=series&amp;id={{show.tvdbid}}&amp;lid=7" target="_blank" title="TheTVDB"><i class="fa fa-tv" aria-hidden="true"></i></a> <a href="http://www.imdb.com/title/{{show.imdb}}/" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {{show.overview}}</span></p>
+<hr>
+{% for k,season in seasons %}
+<ul class="episodes">
+    <li>
+        <h2>Season {{ k }}</h2>
+        <ul>
+            {% for k2,episode in season %}
+            <li class="striped {{ episode.future }}"><i class="fa fa-info-circle" aria-hidden="true" title="{{ episode.desc }}" data-toggle="tooltip" ></i> {{ k2 }}: <b>Due:</b> {{ episode.due_plus|date:'d M y' }}<span id="dlinfo{{ episode.episod }}">{% if episode.downloaded != 'No' %}, <b>Downloaded:</b> {{ episode.downloaded|date:'d M y' }}{% elseif episode.link %} <a data-dllink="{{ episode.link }}" data-dldate="{{ date:'d M y' }}" id="{{ episode.episod }}" class="dl-link"><i class="fa fa-download" aria-hidden="true"></i></a>
+                {% elseif episode.future == '' and episode.downloaded == 'No' %} <a data-dllink="1" data-dldate="{{ date:'d M y' }}" id="{{ episode.eid }}" class="dl-link" title="Manually mark as downloaded"><i class="fa fa-check" aria-hidden="true"></i></a>{% endif %}
+            </span> </li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>
+<br>
+{% endfor %}
+<iframe id="dl_capture"></iframe>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'top'
+    });
+});
+$("a.dl-link").click(function () {
+    var dllink = this.dataset.dllink;
+    var dldate = this.dataset.dldate;
+    var clickedObj = this.id
+
+    $.ajax({
+        url: '{{pagedir}}/ajax.php',
+        data: {
+            'epi': this.id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        type: 'POST',
+        dateType: 'json',
+        success: function (data) {                
+            if( dllink != 1 ){ $('#dl_capture').attr('src',dllink) }
+            if( $('#dlinfo'+data.id).length ) { $('#dlinfo'+data.id).html(data.dldate) }
+            if (data) {
+                console.log(data);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+

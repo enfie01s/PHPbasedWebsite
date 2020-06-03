@@ -1,0 +1,26 @@
+{% extends base.html %}
+{% block headscripts %}
+<meta property="fb:app_id" content="1367180106713752" />
+<meta property="og:url"                content="http://aristia.net/{{rootpg}}/{{post.pub_date|date:'Y/m/d/'}}{{post.seotitle}}" />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="{{post.title}}" />
+<meta property="og:description"        content="{{post.body|truncatehtml:40}}" />
+{% if post.image %}
+<meta property="og:image"              content="http://aristia.net/{{pagedir}}/media/{{post.image|ireplace:'blog/',''}}" />
+{% else %}
+<meta property="og:image"              content="http://aristia.net/mainsitedir/static/img/header.jpg" />
+{% endif %}
+{% endblock %}
+{% block afterbody %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script>
+{% endblock %}
+{% block body %}
+<div class="page-header">
+<h1>{{post.title}}</h1>
+</div>
+<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{pub_date|date:'d M Y'}}</def> {% if loggedin %}<a href="{{rootpg}}/manage/{{post.id}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>{% endif %}
+<p><img src='{{pagedir}}/media/{{post.image|ireplace:"blog/",""}}' alt='' style='max-height:400px' class='img-fluid center-block'></p>
+<p>{{post.body}}</p>
+<div class="fb-comments" data-href='http://aristia.net/{{rootpg}}/{{post.pub_date|date:"Y/m/d"}}/{{post.seotitle}}' data-numposts="5" data-width="100%"></div>
+{% endblock %}

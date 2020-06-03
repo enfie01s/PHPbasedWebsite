@@ -1,0 +1,15 @@
+{% extends base.html %}
+{% block body %}
+<h1 class="text-center">Welcome to my blog</h1>
+<p class="text-center">Here are a few highlights from my life</p>
+
+<h2>Latest Posts {% if loggedin %}<a class="btn btn-primary" href="{{rootpg}}/manage"><i class="fa fa-plus" aria-hidden="true"></i> New Post</a>{% endif %}<br></h2>
+<hr>
+{% for post in posts %}
+<br><br>
+<h3><a href="{{rootpg}}/{{post.pub_date|date:'Y'}}/{{post.pub_date|date:'m'}}/{{post.pub_date|date:'d'}}/{{post.seotitle}}">{{post.title}}</a></h3>
+<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{post.pub_date|date:'d M Y'}}</def>
+{% if post.image %}<p><img src='{{pagedir}}/media/{{post.image|ireplace:"blog/",""}}' alt='' style='max-height:200px' class='img-fluid d-block'></p>{% endif %}
+<p>{{post.body|truncatehtml:400}}</p>
+{% endfor %}
+{% endblock %}

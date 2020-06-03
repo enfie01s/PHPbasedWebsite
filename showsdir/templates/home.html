@@ -1,0 +1,94 @@
+{% extends default.html %}
+
+{% block errors %}
+{% if errors %}<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <b>Error:</b> {{ errors }}</div>{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<h1 class="text-center">Upcoming Shows {% if dltoday %}<i class="fa fa-info-circle" aria-hidden="true" title="<b>Downloaded Today</b>{{ dltoday }}" data-toggle="tooltip" ></i>{% endif %}</h1>
+
+<div class="weekdays row">
+    {% if showserrors %}
+    <ul class="col" id="errorcolumn">
+        <li><h4><span>Error</span></h4>
+            <ul>
+            {% for episode in showserrors %}
+                <li id="epi{{ episode.id }}">
+                    <div>
+                        {% if episode.link %}
+                        <a data-dllink="{{ episode.link }}" id="{{ episode.id }}" class="dl-overlay dl-link"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        {% endif %}
+                        <img src="/{{pagedir}}/media/fart/{{episode.serid}}.jpg" alt="">
+                    </div>                      
+                    <a href="{{rootpg}}/{{episode.seotitle}}">{{ episode.audience|audience }}{{ episode.title|stripslashes }}</a><br>
+                    <small>S:{{ episode.season }} E:{{ episode.episode }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    {% endif %}
+
+    {% for day in weekdays %}
+        <ul class="col">
+            <li><h4><span>{{ day|date:'l' }}</span></h4>
+                <ul>
+                {% for episode in thisweek %}
+                    {% if episode.due_plus == day %}
+                    <li id="epi{{ episode.id }}">
+                        <div>
+                            {% if episode.link %}
+                            <a data-dllink="{{ episode.link }}" id="{{ episode.id }}" class="dl-overlay dl-link"><i class="fa fa-download" aria-hidden="true"></i></a>
+                            {% endif %}
+                            <img src="/{{pagedir}}/media/fart/{{episode.serid}}.jpg" alt="">
+                        </div>                      
+                        <a href="{{rootpg}}/{{episode.seotitle}}">{{ episode.audience|audience }}{{ episode.title|stripslashes }}</a><br>
+                        <small>S:{{ episode.season }} E:{{ episode.episode }}</small>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    {% endfor %}
+</div>
+
+<iframe id="dl_capture"></iframe>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'bottom',
+        html: true
+    });
+});
+$("a.dl-link").click(function () {
+    var dllink = this.dataset.dllink;
+    var clickedObj = this.id
+
+    $.ajax({
+        url: '{{pagedir}}/ajax.php',
+        data: {
+            'epi': this.id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        type: 'POST',
+        dateType: 'json',
+        success: function (data) {
+            $('#dl_capture').attr('src',dllink)
+            $('#epi'+clickedObj).remove()
+            if($('#errorcolumn li ul li').length == 0)
+            {
+                $('#errorcolumn').remove()
+            }
+            if (data) {
+                console.log(data);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends default.html %}
+{% block body %}
+
+{% if upcoming %}
+<br><h2>Upcoming Movies</h2><br>
+<ul class="episodes row">
+{% for movie in upcoming %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{pagedir}}/media/{{ movie.banner|ireplace:'shows/',''}}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.datestr|date:'d M y' }}</small> <div>{% if movie.cert %}<img src="{{pagedir}}/static/img/pegi/{{ movie.cert|lower }}.png" alt="{{ movie.cert }}" style="height:1em" /> {% endif %}{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{{rootpg}}/movies/manage/{{movie.seotitle}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if released %}
+<br><h2>Released Movies</h2><br>
+<ul class="episodes row">
+{% for movie in released %}
+<li class="col-sm-2 {{ movie.fade }}" id="id_{{movie.id}}">{% if movie.banner %}<img src="{{pagedir}}/media/{{ movie.banner|ireplace:'shows/',''}}" alt="" class="mbanner"> {% endif %}<br>{% if movie.overview %}<i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {% endif %}{{ movie.title }}<br><small>{{ movie.datestr|date:'d M y' }}</small> <div>{% if movie.cert %}<img src="{{pagedir}}/static/img/pegi/{{ movie.cert|lower }}.png" alt="{{ movie.cert }}" style="height:1em" /> {% endif %}{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{{rootpg}}/movies/manage/{{movie.seotitle}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'top'
+    });
+});
+$("a.dlm-link").click(function () {
+var dllink = this.dataset.dllink;
+var clickedObj = this.id
+
+$.ajax({
+    url: '{{pagedir}}/ajax.php',
+    data: {
+        'movieid': this.id,
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+    },
+    type: 'POST',
+    dateType: 'json',
+    success: function (data) {
+        $('#id_'+clickedObj).attr('class','col-sm-2 faded');
+        if (data) {
+            console.log(data);
+        }
+    }
+});
+});</script>
+{% endblock %}
+
+
