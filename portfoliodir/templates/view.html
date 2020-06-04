@@ -19,7 +19,7 @@
 <div class="page-header">
 <h1>{{post.title}}</h1>
 </div>
-<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{pub_date|date:'d M Y'}}</def> {% if loggedin %}<a href="{{rootpg}}/manage/{{post.id}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>{% endif %}
+<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{post.pub_date|date:'d M Y'}}</def> {% if loggedin %}<a href="{{rootpg}}/manage/{{post.id}}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>{% endif %}
 <p><img src='{{pagedir}}/media/{{post.image|ireplace:"portfolio/",""}}' alt='' style='max-height:400px' class='img-fluid center-block'></p>
 <p>{{post.body}}</p>
 <div class="fb-comments" data-href='http://aristia.net/{{rootpg}}/{{post.pub_date|date:"Y/m/d"}}/{{post.seotitle}}' data-numposts="5" data-width="100%"></div>
