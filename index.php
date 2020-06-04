@@ -21,8 +21,9 @@ $tpl->headers = array(
     'php_file'=>highlight_file('index.php',true),
 );
 
-if(0&&$_SERVER['HTTP_HOST']!='local.ari'&&!isset($safeget['debug']))
-{error_reporting(0);} // Disable all errors.
+if($_SERVER['HTTP_HOST'] != 'local.ari' && !isset($safeget['debug'])) {
+    error_reporting(0);  // Disable all errors.
+}
 
 $data = array(
     'loggedin'=>$loggedin,
